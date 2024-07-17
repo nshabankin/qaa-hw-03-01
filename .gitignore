@@ -3,6 +3,7 @@ Thumbs.db*
 HELP.md
 .gradle
 build/
+*.log
 
 ### STS ###
 .apt_generated
@@ -41,5 +42,6 @@ out/
 
 ### Exclusions ###
 !gradle/wrapper/gradle-wrapper.jar
+!artifacts/app-order.jar
 !**/src/main/**
 !**/src/test/**
