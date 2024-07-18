@@ -26,12 +26,12 @@ public class OrderTest {
     void shouldSubmitIfAllCorrect() {
 
         // Ввод минимального валидного значения имени и фамилии, и его проверка
-        name.$(".input__control").setValue("а а");
-        name.$(".input__control").shouldHave(value("а а"));
+        name.$("input").setValue("а а");
+        name.$("input").shouldHave(value("а а"));
 
         // Ввод валидного значения номера телефона и его проверка
-        phone.$(" .input__control").setValue("+00000000000");
-        phone.$(" .input__control").shouldHave(value("+00000000000"));
+        phone.$("input").setValue("+00000000000");
+        phone.$("input").shouldHave(value("+00000000000"));
 
         // Клик на чек-бокс с "соглашением" и проверка статуса чек-бокса
         agreement.$(".checkbox__box").click();
@@ -48,10 +48,10 @@ public class OrderTest {
     void shouldNotifyIfIncorrectName() {
 
         // Ввод некорректного значения имени и фамилии
-        name.$(".input__control").setValue("f f");
+        name.$("input").setValue("f f");
 
         // Ввод валидного значения номера телефона
-        phone.$(".input__control").setValue("+00000000000");
+        phone.$("input").setValue("+00000000000");
 
         // Клик на чек-бокс с "соглашением"
         agreement.$(".checkbox__box").click();
@@ -59,18 +59,19 @@ public class OrderTest {
         // Клик на кнопку "Продолжить"
         submit.click();
 
-        // Проверка сообщения после отправки формы в поле имени
-        name.$(".input__sub").shouldHave(text("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы."));
+        // Проверка видимости и текста сообщения в поле имени после отправки формы с некорректным значением
+        name.$(".input_invalid .input__sub").shouldBe(visible);
+        name.$(".input_invalid .input__sub").shouldHave(text("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы."));
     }
 
     @Test
     void shouldNotifyIfIncorrectPhone() {
 
         // Ввод корректного значения имени и фамилии
-        name.$(".input__control").setValue("а а");
+        name.$("input").setValue("а а");
 
         // Ввод некорректного значения номера телефона
-        phone.$(".input__control").setValue("00000000000");
+        phone.$("input").setValue("00000000000");
 
         // Клик на чек-бокс с "соглашением"
         agreement.$(".checkbox__box").click();
@@ -78,18 +79,59 @@ public class OrderTest {
         // Клик на кнопку "Продолжить"
         submit.click();
 
-        // Проверка сообщения после отправки формы в поле номера телефона
-        phone.$(".input__sub").shouldHave(text("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678."));
+        // Проверка видимости и текста сообщения в поле номера телефона после отправки формы с некорректным значением
+        phone.$(".input_invalid .input__sub").shouldBe(visible);
+        phone.$(".input_invalid .input__sub").shouldHave(text("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678."));
+    }
+
+    @Test
+    void shouldNotifyIfEmptyName() {
+
+        // Не вводится значение в поле имени и фамилии, проверка пустого значения
+        name.$("input").shouldHave(value(""));
+
+        // Ввод корректного значения номера телефона
+        phone.$("input").setValue("+00000000000");
+
+        // Клик на чек-бокс с "соглашением"
+        agreement.$(".checkbox__box").click();
+
+        // Клик на кнопку "Продолжить"
+        submit.click();
+
+        // Проверка видимости и текста сообщения в поле имени после отправки формы с пустым значением
+        name.$(".input_invalid .input__sub").shouldBe(visible);
+        name.$(".input_invalid .input__sub").shouldHave(text("Поле обязательно для заполнения"));
+    }
+
+    @Test
+    void shouldNotifyIfEmptyPhone() {
+
+        // Ввод корректного значения имени и фамилии
+        name.$("input").setValue("а а");
+
+        // Не вводится значение в поле номера телефона, проверка этого значения
+        phone.$("input").shouldHave(value(""));
+
+        // Клик на чек-бокс с "соглашением"
+        agreement.$(".checkbox__box").click();
+
+        // Клик на кнопку "Продолжить"
+        submit.click();
+
+        // Проверка видимости и текста сообщения в поле имени после отправки формы с пустым значением
+        phone.$(".input_invalid .input__sub").shouldBe(visible);
+        phone.$(".input_invalid .input__sub").shouldHave(text("Поле обязательно для заполнения"));
     }
 
     @Test
     void shouldNotifyIfNoAgreement() {
 
         // Ввод корректного значения имени и фамилии
-        name.$(".input__control").setValue("а а");
+        name.$("input").setValue("а а");
 
         // Ввод корректного значения номера телефона
-        phone.$(".input__control").setValue("+00000000000");
+        phone.$("input").setValue("+00000000000");
 
         // Клик на кнопку "Продолжить" без клика на чек-бокс с "соглашением"
         submit.click();
